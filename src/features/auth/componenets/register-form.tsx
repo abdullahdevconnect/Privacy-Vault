@@ -1,11 +1,13 @@
+// components/register-form.tsx
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import zxcvbn from "zxcvbn";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,15 +25,28 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-//import { authClient } from "@/lib/auth-client";
-import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
+import { PasswordStrength } from "@/components/ui/password-strength";
+import Image from "next/image";
 
+// Custom zxcvbn-based password validation
 const registerSchema = z
   .object({
     email: z.string().email("Please enter a valid email address"),
-    password: z.string().min(1, "Password is required"),
-    confirmPassword: z.string().min(1, "Password is required"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .max(128, "Password must be less than 128 characters")
+      .refine(
+        (password) => {
+          const result = zxcvbn(password);
+          return result.score >= 3;
+        },
+        {
+          message: "Password is too weak. Please choose a stronger password.",
+        }
+      ),
+    confirmPassword: z.string().min(1, "Please confirm your password"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -49,7 +64,10 @@ export function RegisterForm() {
       password: "",
       confirmPassword: "",
     },
+    mode: "onChange",
   });
+
+  const watchPassword = form.watch("password");
 
   const onSubmit = async (values: RegisterFormValues) => {
     try {
@@ -100,6 +118,13 @@ export function RegisterForm() {
                     className="w-full"
                     type="button"
                     disabled={isPending}>
+                      <Image
+                                            alt="GitHub"
+                                            src="/logos/github.svg"
+                                            width={20}
+                                            height={20}
+                                            className="inline-block"
+                                          />
                     Continue with Github
                   </Button>
                   <Button
@@ -107,9 +132,17 @@ export function RegisterForm() {
                     className="w-full"
                     type="button"
                     disabled={isPending}>
+                      <Image
+                                            alt="Google"
+                                            src="/logos/google.svg"
+                                            width={20}
+                                            height={20}
+                                            className="inline-block" 
+                                          />
                     Continue with Google
                   </Button>
                 </div>
+
                 <div className="grid gap-6">
                   <FormField
                     control={form.control}
@@ -128,6 +161,7 @@ export function RegisterForm() {
                       </FormItem>
                     )}
                   />
+
                   <FormField
                     control={form.control}
                     name="password"
@@ -137,14 +171,17 @@ export function RegisterForm() {
                         <FormControl>
                           <Input
                             type="password"
-                            placeholder="********"
+                            placeholder="Create a strong password"
                             {...field}
                           />
                         </FormControl>
+                        {/* Password Strength Indicator */}
+                        <PasswordStrength password={watchPassword} />
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+
                   <FormField
                     control={form.control}
                     name="confirmPassword"
@@ -154,7 +191,7 @@ export function RegisterForm() {
                         <FormControl>
                           <Input
                             type="password"
-                            placeholder="********"
+                            placeholder="Confirm your password"
                             {...field}
                           />
                         </FormControl>
@@ -162,10 +199,12 @@ export function RegisterForm() {
                       </FormItem>
                     )}
                   />
+
                   <Button type="submit" className="w-full" disabled={isPending}>
-                    Sign Up
+                    {isPending ? "Creating account..." : "Sign Up"}
                   </Button>
                 </div>
+
                 <div className="text-center text-sm">
                   Already have an account?{" "}
                   <Link href="/login" className="underline underline-offset-4">
