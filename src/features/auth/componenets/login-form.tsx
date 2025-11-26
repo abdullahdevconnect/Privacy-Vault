@@ -1,6 +1,7 @@
+// components/login-form.tsx
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -23,10 +24,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-//import { authClient } from "@/lib/auth-client";
-import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
+import Image from "next/image";
 
+// Login only needs basic validation - no strength check
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(1, "Password is required"),
@@ -65,7 +66,7 @@ export function LoginForm() {
             toast.dismiss();
             toast.error(ctx.error.message);
           },
-        } 
+        }
       );
     } catch (error) {
       toast.dismiss();
@@ -92,6 +93,13 @@ export function LoginForm() {
                     className="w-full"
                     type="button"
                     disabled={isPending}>
+                    <Image
+                      alt="GitHub"
+                      src="/logos/github.svg"
+                      width={20}
+                      height={20}
+                      className="inline-block" 
+                    />
                     Continue with Github
                   </Button>
                   <Button
@@ -99,9 +107,17 @@ export function LoginForm() {
                     className="w-full"
                     type="button"
                     disabled={isPending}>
+                    <Image
+                      alt="Google"
+                      src="/logos/google.svg"
+                      width={20}
+                      height={20}
+                      className="inline-block" 
+                    />
                     Continue with Google
                   </Button>
                 </div>
+
                 <div className="grid gap-6">
                   <FormField
                     control={form.control}
@@ -120,6 +136,7 @@ export function LoginForm() {
                       </FormItem>
                     )}
                   />
+
                   <FormField
                     control={form.control}
                     name="password"
@@ -129,7 +146,7 @@ export function LoginForm() {
                         <FormControl>
                           <Input
                             type="password"
-                            placeholder="********"
+                            placeholder="Enter your password"
                             {...field}
                           />
                         </FormControl>
@@ -137,10 +154,12 @@ export function LoginForm() {
                       </FormItem>
                     )}
                   />
+
                   <Button type="submit" className="w-full" disabled={isPending}>
-                    Login
+                    {isPending ? "Logging in..." : "Login"}
                   </Button>
                 </div>
+
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{" "}
                   <Link href="/signup" className="underline underline-offset-4">
