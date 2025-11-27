@@ -1,0 +1,15 @@
+procs:
+  next-dev:
+    cmd: ["pwsh", "-Command", "npm run dev"]
+    cwd: "F:/nodebase_final_pro"
+    autostart: true
+
+  inngest-dev:
+    cmd: ["pwsh", "-Command", "npx inngest-cli@latest dev"]
+    cwd: "F:/nodebase_final_pro"
+    autostart: true
+
+  prisma-studio:
+    cmd: ["pwsh", "-Command", "npx prisma studio"]
+    cwd: "F:/nodebase_final_pro"
+    autostart: false
