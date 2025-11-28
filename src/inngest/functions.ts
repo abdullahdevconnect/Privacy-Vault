@@ -1,9 +1,9 @@
-import prisma from "@/lib/db";
 import { inngest } from "./client";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai"; // Fixed: Capitalization of 'AI'
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { generateText } from "ai";
+import * as Sentry from "@sentry/nextjs";
 
 const google = createGoogleGenerativeAI();
 const openai = createOpenAI();
@@ -18,17 +18,25 @@ export const execute = inngest.createFunction(
   async ({ event, step }) => {
     await step.sleep("pretend to execute", 1000);
 
-    // Note: 'steps' property is usually populated when using tools/maxSteps.
-    // For simple text generation, the main result is in the 'text' property,
-    // but keeping your destructuring logic as requested.
+    Sentry.logger.info("User triggered test log", {
+      log_source: "sentry_test",
+    });
+
+    console.warn("Something is missing");
+    console.error("This is an error i want to track");
 
     const { steps: geminiSteps } = await step.ai.wrap(
       "gemini-generate-text",
       generateText,
       {
-        model: google("gemini-1.5-flash"), // Fixed: Changed to valid model ID
+        model: google("gemini-2.5-flash"),
         system: "You are a helpful assistant.",
         prompt: "What is 2 + 2?",
+        experimental_telemetry: {
+          isEnabled: true,
+          recordInputs: true,
+          recordOutputs: true,
+        },
       }
     );
 
@@ -36,9 +44,14 @@ export const execute = inngest.createFunction(
       "openai-generate-text",
       generateText,
       {
-        model: openai("gpt-4"), // Fixed: Changed 'gpt4' to 'gpt-4'
+        model: openai("gpt-4"),
         system: "You are a helpful assistant.",
         prompt: "What is 2 + 2?",
+        experimental_telemetry: {
+          isEnabled: true,
+          recordInputs: true,
+          recordOutputs: true,
+        },
       }
     );
 
@@ -46,16 +59,20 @@ export const execute = inngest.createFunction(
       "anthropic-generate-text",
       generateText,
       {
-        model: anthropic("claude-3-opus-20240229"), 
+        model: anthropic("claude-3-opus-20240229"),
         system: "You are a helpful assistant.",
         prompt: "What is 2 + 2?",
+        experimental_telemetry: {
+          isEnabled: true,
+          recordInputs: true,
+          recordOutputs: true,
+        },
       }
     );
 
     return {
       name: "execute/ai",
       data: {
-        
         geminiSteps,
         openaiSteps,
         anthropicSteps,
