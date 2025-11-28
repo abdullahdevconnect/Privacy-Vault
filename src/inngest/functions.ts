@@ -1,32 +1,65 @@
 import prisma from "@/lib/db";
 import { inngest } from "./client";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createOpenAI } from "@ai-sdk/openai"; // Fixed: Capitalization of 'AI'
+import { createAnthropic } from "@ai-sdk/anthropic";
+import { generateText } from "ai";
 
-export const helloWorld = inngest.createFunction(
-  { id: "hello-world" },
+const google = createGoogleGenerativeAI();
+const openai = createOpenAI();
+const anthropic = createAnthropic();
+
+export const execute = inngest.createFunction(
+  { id: "execute-ai" },
   {
-    event: "test/hello.world",
+    event: "execute/ai",
     retries: 3,
-    retryDelay: ({ retry }: { retry: number }) => retry * 5000, // 5s, 10s, 15s
   },
   async ({ event, step }) => {
-    // Step 1
-    await step.sleep("Fetching the video", "5s");
+    await step.sleep("pretend to execute", 1000);
 
-    // Step 2
-    await step.sleep("Transcribing the video", "5s");
+    // Note: 'steps' property is usually populated when using tools/maxSteps.
+    // For simple text generation, the main result is in the 'text' property,
+    // but keeping your destructuring logic as requested.
 
-    // Step 3
-    await step.sleep("Sending transcription to AI", "5s");
+    const { steps: geminiSteps } = await step.ai.wrap(
+      "gemini-generate-text",
+      generateText,
+      {
+        model: google("gemini-1.5-flash"), // Fixed: Changed to valid model ID
+        system: "You are a helpful assistant.",
+        prompt: "What is 2 + 2?",
+      }
+    );
 
-    // Step 4 - Create Workflow
-    const workflow = await step.run("create-workflow", async () => {
-      return prisma.workflow.create({
-        data: {
-          name: "workflow-from-inngest",
-        },
-      });
-    });
+    const { steps: openaiSteps } = await step.ai.wrap(
+      "openai-generate-text",
+      generateText,
+      {
+        model: openai("gpt-4"), // Fixed: Changed 'gpt4' to 'gpt-4'
+        system: "You are a helpful assistant.",
+        prompt: "What is 2 + 2?",
+      }
+    );
 
-    return { message: `Hello ${event.data.email}!`, workflow };
+    const { steps: anthropicSteps } = await step.ai.wrap(
+      "anthropic-generate-text",
+      generateText,
+      {
+        model: anthropic("claude-3-opus-20240229"), 
+        system: "You are a helpful assistant.",
+        prompt: "What is 2 + 2?",
+      }
+    );
+
+    return {
+      name: "execute/ai",
+      data: {
+        
+        geminiSteps,
+        openaiSteps,
+        anthropicSteps,
+      },
+    };
   }
 );
