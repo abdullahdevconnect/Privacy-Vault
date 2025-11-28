@@ -4,6 +4,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react"; // Added state
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -26,6 +27,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
+import { Eye, EyeOff } from "lucide-react"; // Added Icons
 
 // Login only needs basic validation - no strength check
 const loginSchema = z.object({
@@ -37,6 +39,8 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false); // State for visibility
+
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -98,7 +102,7 @@ export function LoginForm() {
                       src="/logos/github.svg"
                       width={20}
                       height={20}
-                      className="inline-block" 
+                      className="inline-block"
                     />
                     Continue with Github
                   </Button>
@@ -112,7 +116,7 @@ export function LoginForm() {
                       src="/logos/google.svg"
                       width={20}
                       height={20}
-                      className="inline-block" 
+                      className="inline-block"
                     />
                     Continue with Google
                   </Button>
@@ -144,11 +148,30 @@ export function LoginForm() {
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Enter your password"
-                            {...field}
-                          />
+                          <div className="relative">
+                            <Input
+                              type={showPassword ? "text" : "password"}
+                              placeholder="Enter your password"
+                              {...field}
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-muted-foreground"
+                              onClick={() => setShowPassword(!showPassword)}>
+                              {showPassword ? (
+                                <EyeOff className="h-4 w-4" />
+                              ) : (
+                                <Eye className="h-4 w-4" />
+                              )}
+                              <span className="sr-only">
+                                {showPassword
+                                  ? "Hide password"
+                                  : "Show password"}
+                              </span>
+                            </Button>
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>

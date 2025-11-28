@@ -4,6 +4,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react"; // Added state
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -28,6 +29,7 @@ import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { PasswordStrength } from "@/components/ui/password-strength";
 import Image from "next/image";
+import { Eye, EyeOff } from "lucide-react"; // Added Icons
 
 // Custom zxcvbn-based password validation
 const registerSchema = z
@@ -57,6 +59,10 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
   const router = useRouter();
+  // State for toggling visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -118,13 +124,13 @@ export function RegisterForm() {
                     className="w-full"
                     type="button"
                     disabled={isPending}>
-                      <Image
-                                            alt="GitHub"
-                                            src="/logos/github.svg"
-                                            width={20}
-                                            height={20}
-                                            className="inline-block"
-                                          />
+                    <Image
+                      alt="GitHub"
+                      src="/logos/github.svg"
+                      width={20}
+                      height={20}
+                      className="inline-block"
+                    />
                     Continue with Github
                   </Button>
                   <Button
@@ -132,13 +138,13 @@ export function RegisterForm() {
                     className="w-full"
                     type="button"
                     disabled={isPending}>
-                      <Image
-                                            alt="Google"
-                                            src="/logos/google.svg"
-                                            width={20}
-                                            height={20}
-                                            className="inline-block" 
-                                          />
+                    <Image
+                      alt="Google"
+                      src="/logos/google.svg"
+                      width={20}
+                      height={20}
+                      className="inline-block"
+                    />
                     Continue with Google
                   </Button>
                 </div>
@@ -169,11 +175,30 @@ export function RegisterForm() {
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Create a strong password"
-                            {...field}
-                          />
+                          <div className="relative">
+                            <Input
+                              type={showPassword ? "text" : "password"}
+                              placeholder="Create a strong password"
+                              {...field}
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-muted-foreground"
+                              onClick={() => setShowPassword(!showPassword)}>
+                              {showPassword ? (
+                                <EyeOff className="h-4 w-4" />
+                              ) : (
+                                <Eye className="h-4 w-4" />
+                              )}
+                              <span className="sr-only">
+                                {showPassword
+                                  ? "Hide password"
+                                  : "Show password"}
+                              </span>
+                            </Button>
+                          </div>
                         </FormControl>
                         {/* Password Strength Indicator */}
                         <PasswordStrength password={watchPassword} />
@@ -189,11 +214,32 @@ export function RegisterForm() {
                       <FormItem>
                         <FormLabel>Confirm Password</FormLabel>
                         <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Confirm your password"
-                            {...field}
-                          />
+                          <div className="relative">
+                            <Input
+                              type={showConfirmPassword ? "text" : "password"}
+                              placeholder="Confirm your password"
+                              {...field}
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-muted-foreground"
+                              onClick={() =>
+                                setShowConfirmPassword(!showConfirmPassword)
+                              }>
+                              {showConfirmPassword ? (
+                                <EyeOff className="h-4 w-4" />
+                              ) : (
+                                <Eye className="h-4 w-4" />
+                              )}
+                              <span className="sr-only">
+                                {showConfirmPassword
+                                  ? "Hide password"
+                                  : "Show password"}
+                              </span>
+                            </Button>
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
