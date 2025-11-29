@@ -112,6 +112,15 @@ export const AppSidebar = () => {
 
       <SidebarFooter>
         <SidebarMenu className="gap-1">
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              tooltip="Upgrade to Pro"
+              className="gap-x-4 h-10 px-4"
+              onClick={() => {}}>
+              <StarIcon className="h-4 w-4" />
+              <span>Upgrade to Pro</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           {!hasActiveSubscription && !isLoading && (
             <SidebarMenuItem>
               <SidebarMenuButton
@@ -128,6 +137,7 @@ export const AppSidebar = () => {
             <SidebarMenuButton
               tooltip="Billing Portal"
               className="gap-x-4 h-10 px-4"
+              onClick={() => {}}>
               onClick={() => authClient.customer.portal()}>
               <CreditCardIcon className="h-4 w-4" />
               <span>Billing Portal</span>
