@@ -1,10 +1,11 @@
 import { inngest } from "./client";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { createOpenAI } from "@ai-sdk/openai"; // Fixed: Capitalization of 'AI'
+import { createOpenAI } from "@ai-sdk/openai";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { generateText } from "ai";
 import * as Sentry from "@sentry/nextjs";
 
+// Initialize providers (Ensure ENV variables are set for these)
 const google = createGoogleGenerativeAI();
 const openai = createOpenAI();
 const anthropic = createAnthropic();
@@ -18,18 +19,23 @@ export const execute = inngest.createFunction(
   async ({ event, step }) => {
     await step.sleep("pretend to execute", 1000);
 
-    Sentry.logger.info("User triggered test log", {
-      log_source: "sentry_test",
+    // ✅ FIX: Use public API to send logs to Sentry
+    Sentry.captureMessage("User triggered test log", {
+      level: "info",
+      extra: {
+        log_source: "sentry_test",
+      },
     });
 
     console.warn("Something is missing");
     console.error("This is an error i want to track");
 
-    const { steps: geminiSteps } = await step.ai.wrap(
+    // FIX: generateText returns { text, usage, ... }, not { steps }
+    const geminiResult = await step.ai.wrap(
       "gemini-generate-text",
       generateText,
       {
-        model: google("gemini-2.5-flash"),
+        model: google("gemini-2.5-flash"), 
         system: "You are a helpful assistant.",
         prompt: "What is 2 + 2?",
         experimental_telemetry: {
@@ -40,7 +46,7 @@ export const execute = inngest.createFunction(
       }
     );
 
-    const { steps: openaiSteps } = await step.ai.wrap(
+    const openaiResult = await step.ai.wrap(
       "openai-generate-text",
       generateText,
       {
@@ -55,7 +61,7 @@ export const execute = inngest.createFunction(
       }
     );
 
-    const { steps: anthropicSteps } = await step.ai.wrap(
+    const anthropicResult = await step.ai.wrap(
       "anthropic-generate-text",
       generateText,
       {
@@ -73,9 +79,9 @@ export const execute = inngest.createFunction(
     return {
       name: "execute/ai",
       data: {
-        geminiSteps,
-        openaiSteps,
-        anthropicSteps,
+        geminiResult,
+        openaiResult,
+        anthropicResult,
       },
     };
   }

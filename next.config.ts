@@ -1,7 +1,10 @@
-import {withSentryConfig} from "@sentry/nextjs";
+import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Sirf ye line add ki hai taake Prisma browser bundle mein na jaye
+  serverExternalPackages: ["@prisma/client"],
+
   async redirects() {
     return [
       {
@@ -43,5 +46,5 @@ export default withSentryConfig(nextConfig, {
   // See the following for more information:
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
-  automaticVercelMonitors: true
+  automaticVercelMonitors: true,
 });

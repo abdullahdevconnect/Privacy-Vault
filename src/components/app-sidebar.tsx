@@ -52,7 +52,7 @@ const menuItems = [
 export const AppSidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const {hasActiveSubscription, isLoading} = useHasActiveSubscription();
+  const { hasActiveSubscription, isLoading } = useHasActiveSubscription();
 
   return (
     <Sidebar collapsible="icon">
@@ -78,7 +78,6 @@ export const AppSidebar = () => {
         {menuItems.map((group) => (
           <SidebarGroup key={group.title}>
             <SidebarGroupContent>
-              {/* Added gap-2 here for better vertical spacing */}
               <SidebarMenu className="gap-2">
                 {group.items.map((item) => {
                   const isActive =
@@ -92,7 +91,6 @@ export const AppSidebar = () => {
                         tooltip={item.title}
                         isActive={isActive}
                         asChild
-                        // Updated styling for a beautiful highlight
                         className="gap-x-4 h-10 px-4 transition-all duration-200
                                    data-[active=true]:bg-primary/5 data-[active=true]:text-primary 
                                    data-[active=true]:font-bold data-[active=true]:shadow-sm">
@@ -112,15 +110,6 @@ export const AppSidebar = () => {
 
       <SidebarFooter>
         <SidebarMenu className="gap-1">
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              tooltip="Upgrade to Pro"
-              className="gap-x-4 h-10 px-4"
-              onClick={() => {}}>
-              <StarIcon className="h-4 w-4" />
-              <span>Upgrade to Pro</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
           {!hasActiveSubscription && !isLoading && (
             <SidebarMenuItem>
               <SidebarMenuButton
@@ -137,7 +126,6 @@ export const AppSidebar = () => {
             <SidebarMenuButton
               tooltip="Billing Portal"
               className="gap-x-4 h-10 px-4"
-              onClick={() => {}}>
               onClick={() => authClient.customer.portal()}>
               <CreditCardIcon className="h-4 w-4" />
               <span>Billing Portal</span>
@@ -164,4 +152,5 @@ export const AppSidebar = () => {
     </Sidebar>
   );
 };
+
 export default AppSidebar;
