@@ -7,10 +7,26 @@ import { requireAuth } from "@/lib/auth-utils";
 import { HydrateClient } from "@/trpc/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { searchParamsCache } from "@/features/workflows/params";
 
-const Page = async () => {
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+const Page = async ({ searchParams }: PageProps) => {
   await requireAuth();
-  void prefetchWorkflows({});
+
+  
+  const resolvedSearchParams = await searchParams;
+  const params = searchParamsCache.parse(resolvedSearchParams);
+
+
+  void prefetchWorkflows(params).catch((err) => {
+    // Optional: Log error in development only
+    if (process.env.NODE_ENV === "development") {
+      console.error("Prefetch failed (likely auth issue):", err);
+    }
+  });
 
   return (
     <WorkflowsContainer>

@@ -1,7 +1,17 @@
-import { PlusIcon } from "lucide-react";
+"use client";
+
+import { PlusIcon, SearchIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+} from "@/components/ui/pagination";
 import Link from "next/link";
 import React from "react";
+
+// --- Entity Header ---
 
 type EntityHeaderProps = {
   title: string;
@@ -52,6 +62,8 @@ export const EntityHeader = ({
   );
 };
 
+// --- Entity Container ---
+
 type EntityContainerProps = {
   children: React.ReactNode;
   header?: React.ReactNode;
@@ -75,6 +87,96 @@ export const EntityContainer = ({
         </div>
         {pagination}
       </div>
+    </div>
+  );
+};
+
+// --- Entity Search ---
+
+export interface EntitySearchProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+}
+
+export const EntitySearch = ({
+  value,
+  onChange,
+  placeholder,
+}: EntitySearchProps) => {
+  return (
+    <div className="relative">
+      <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+      <Input
+        type="search"
+        placeholder={placeholder ?? "Search..."}
+        className="w-full bg-background pl-8 h-9"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </div>
+  );
+};
+
+// --- Entity Pagination (Updated) ---
+
+export interface EntityPaginationProps {
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  disabled?: boolean;
+}
+
+export const EntityPagination = ({
+  page,
+  totalPages,
+  onPageChange,
+  disabled,
+}: EntityPaginationProps) => {
+  // Agar sirf 1 page hai to pagination na dikhayein
+  if (totalPages <= 1) {
+    return null;
+  }
+
+  return (
+    <div className="flex items-center justify-between border-t pt-4 mt-4 w-full">
+      {/* Left Side: Page Info */}
+      <div className="text-sm text-muted-foreground">
+        Page {page} of {totalPages}
+      </div>
+
+      {/* Right Side: Navigation Buttons */}
+      <Pagination className="w-auto mx-0">
+        <PaginationContent className="gap-2">
+          <PaginationItem>
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1 pl-2.5"
+              onClick={() => {
+                if (page > 1) onPageChange(page - 1);
+              }}
+              disabled={page <= 1 || disabled}>
+              <ChevronLeft className="h-4 w-4" />
+              <span>Previous</span>
+            </Button>
+          </PaginationItem>
+
+          <PaginationItem>
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1 pr-2.5"
+              onClick={() => {
+                if (page < totalPages) onPageChange(page + 1);
+              }}
+              disabled={page >= totalPages || disabled}>
+              <span>Next</span>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 };
