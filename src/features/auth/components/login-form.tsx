@@ -1,10 +1,9 @@
-// components/login-form.tsx
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react"; // Added state
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -27,9 +26,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
-import { Eye, EyeOff } from "lucide-react"; // Added Icons
+import { Eye, EyeOff } from "lucide-react";
 
-// Login only needs basic validation - no strength check
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(1, "Password is required"),
@@ -37,9 +35,9 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-export function LoginForm() {
+export default function LoginForm() {
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false); // State for visibility
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -50,32 +48,46 @@ export function LoginForm() {
   });
 
   const onSubmit = async (values: LoginFormValues) => {
-    try {
-      await authClient.signIn.email(
-        {
-          email: values.email,
-          password: values.password,
-          callbackURL: "/",
+    await authClient.signIn.email(
+      {
+        email: values.email,
+        password: values.password,
+        callbackURL: "/",
+      },
+      {
+        onRequest: () => {
+          toast.loading("Logging in...");
         },
-        {
-          onRequest: () => {
-            toast.loading("Logging in...");
-          },
-          onSuccess: () => {
-            toast.dismiss();
-            toast.success("Login successful!");
-            router.push("/");
-          },
-          onError: (ctx) => {
-            toast.dismiss();
-            toast.error(ctx.error.message);
-          },
-        }
-      );
-    } catch (error) {
-      toast.dismiss();
-      toast.error("Failed to login. Please try again.");
-    }
+        onSuccess: () => {
+          toast.dismiss();
+          toast.success("Login successful!");
+          router.push("/");
+        },
+        onError: (ctx) => {
+          toast.dismiss();
+          toast.error(ctx.error.message);
+        },
+      }
+    );
+  };
+
+  // ✅ New Function: Handle Social Login
+  const handleSocialSignIn = async (provider: "github" | "google") => {
+    await authClient.signIn.social(
+      {
+        provider,
+        callbackURL: "/",
+      },
+      {
+        onRequest: () => {
+          toast.loading(`Connecting to ${provider}...`);
+        },
+        onError: (ctx) => {
+          toast.dismiss();
+          toast.error(ctx.error.message);
+        },
+      }
+    );
   };
 
   const isPending = form.formState.isSubmitting;
@@ -96,7 +108,9 @@ export function LoginForm() {
                     variant="outline"
                     className="w-full"
                     type="button"
-                    disabled={isPending}>
+                    disabled={isPending}
+                    // ✅ Add onClick handler
+                    onClick={() => handleSocialSignIn("github")}>
                     <Image
                       alt="GitHub"
                       src="/logos/github.svg"
@@ -110,7 +124,9 @@ export function LoginForm() {
                     variant="outline"
                     className="w-full"
                     type="button"
-                    disabled={isPending}>
+                    disabled={isPending}
+                    // ✅ Add onClick handler
+                    onClick={() => handleSocialSignIn("google")}>
                     <Image
                       alt="Google"
                       src="/logos/google.svg"
@@ -197,5 +213,3 @@ export function LoginForm() {
     </div>
   );
 }
-
-export default LoginForm;

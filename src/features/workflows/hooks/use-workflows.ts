@@ -11,7 +11,7 @@ export const useCreateWorkflow = () => {
   const utils = trpc.useUtils();
 
   return trpc.workflows.create.useMutation({
-    // Fixed: Added ': any' to resolve implicit type errors
+    
     onSuccess: async (data: any) => {
       toast.success(`Workflow "${data.name}" created`, {
         id: "create-workflow",
@@ -19,8 +19,7 @@ export const useCreateWorkflow = () => {
 
       await utils.workflows.getMany.invalidate();
     },
-    // Fixed: Added ': any' to resolve implicit type errors
-    onError: (error: any) => {
+        onError: (error: any) => {
       toast.error(`Failed to create workflow: ${error.message}`, {
         id: "create-workflow",
       });

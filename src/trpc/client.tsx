@@ -1,15 +1,36 @@
 "use client";
 
-import type { QueryClient } from "@tanstack/react-query";
-import { QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  defaultShouldDehydrateQuery,
+} from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import { useState } from "react";
-import { makeQueryClient } from "./query-client";
-import type { AppRouter } from "./routers/_app";
 import superjson from "superjson";
+import type { AppRouter } from "./routers/_app"; // Make sure this path points to your router
 
 export const trpc = createTRPCReact<AppRouter>();
+
+export function makeQueryClient() {
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 30 * 1000,
+      },
+      dehydrate: {
+        serializeData: superjson.serialize,
+        shouldDehydrateQuery: (query) =>
+          defaultShouldDehydrateQuery(query) ||
+          query.state.status === "pending",
+      },
+      hydrate: {
+        deserializeData: superjson.deserialize,
+      },
+    },
+  });
+}
 
 let browserQueryClient: QueryClient | undefined = undefined;
 
@@ -39,12 +60,9 @@ export function TRPCReactProvider(
 
   const [trpcClient] = useState(() =>
     trpc.createClient({
-      // ❌ Note: Pehle 'transformer' yahan hota tha, ab yahan nahi lagana.
-
       links: [
         httpBatchLink({
           url: getUrl(),
-          // ✅ FIX: Ab 'transformer' is object ke andar aata hai
           transformer: superjson,
         }),
       ],

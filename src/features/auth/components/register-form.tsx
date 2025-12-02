@@ -1,10 +1,9 @@
-// components/register-form.tsx
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react"; // Added state
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -29,7 +28,7 @@ import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { PasswordStrength } from "@/components/ui/password-strength";
 import Image from "next/image";
-import { Eye, EyeOff } from "lucide-react"; // Added Icons
+import { Eye, EyeOff } from "lucide-react";
 
 // Custom zxcvbn-based password validation
 const registerSchema = z
@@ -59,7 +58,6 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
   const router = useRouter();
-  // State for toggling visibility
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -105,6 +103,25 @@ export function RegisterForm() {
     }
   };
 
+  // ✅ New Function: Handle Social Login
+  const handleSocialSignIn = async (provider: "github" | "google") => {
+    await authClient.signIn.social(
+      {
+        provider,
+        callbackURL: "/",
+      },
+      {
+        onRequest: () => {
+          toast.loading(`Connecting to ${provider}...`);
+        },
+        onError: (ctx) => {
+          toast.dismiss();
+          toast.error(ctx.error.message);
+        },
+      }
+    );
+  };
+
   const isPending = form.formState.isSubmitting;
 
   return (
@@ -123,7 +140,9 @@ export function RegisterForm() {
                     variant="outline"
                     className="w-full"
                     type="button"
-                    disabled={isPending}>
+                    disabled={isPending}
+                    // ✅ Add onClick handler
+                    onClick={() => handleSocialSignIn("github")}>
                     <Image
                       alt="GitHub"
                       src="/logos/github.svg"
@@ -137,7 +156,9 @@ export function RegisterForm() {
                     variant="outline"
                     className="w-full"
                     type="button"
-                    disabled={isPending}>
+                    disabled={isPending}
+                    // ✅ Add onClick handler
+                    onClick={() => handleSocialSignIn("google")}>
                     <Image
                       alt="Google"
                       src="/logos/google.svg"
