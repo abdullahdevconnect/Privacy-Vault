@@ -1,8 +1,9 @@
+//F:\nodebase_final_pro\src\trpc\query-client.ts
 import {
   defaultShouldDehydrateQuery,
   QueryClient,
 } from "@tanstack/react-query";
-import superjson from "superjson"; // ✅ Uncommented
+import superjson from "superjson"; 
 
 export function makeQueryClient() {
   return new QueryClient({
@@ -18,7 +19,7 @@ export function makeQueryClient() {
           query.state.status === "pending",
       },
       hydrate: {
-        // ✅ Uncommented
+        
         deserializeData: superjson.deserialize,
       },
     },

@@ -1,8 +1,7 @@
-"use client";
+// src/features/workflows/hooks/use-workflows-params.ts
+import { parseAsInteger, parseAsString } from "nuqs";
 
-import { useQueryStates } from "nuqs";
-import { workflowsParams } from "../params";
-
-export const useWorkflowsParams = () => {
-  return useQueryStates(workflowsParams);
+export const workflowsParams = {
+  page: parseAsInteger.withDefault(1),
+  search: parseAsString.withDefault(""),
 };

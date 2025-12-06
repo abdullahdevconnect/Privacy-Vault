@@ -1,3 +1,4 @@
+//F:\nodebase_final_pro\src\lib\auth.ts
 import { checkout, polar, portal } from "@polar-sh/better-auth";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";

@@ -1,3 +1,4 @@
+//F:\nodebase_final_pro\src\app\api\inngest\route.ts
 import { serve } from "inngest/next";
 import { inngest } from "@/inngest/client";
 import { execute } from "@/inngest/functions";

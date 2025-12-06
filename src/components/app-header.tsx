@@ -1,3 +1,4 @@
+//F:\nodebase_final_pro\src\components\app-header.tsx
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export const AppHeader = () => {

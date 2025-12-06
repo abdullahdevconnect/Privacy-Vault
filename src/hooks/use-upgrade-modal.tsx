@@ -1,7 +1,7 @@
+//F:\nodebase_final_pro\src\hooks\use-upgrade-modal.tsx
 import { TRPCClientError } from "@trpc/client";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { UpgradeModal } from "@/components/upgrade-modal";
-
 
 export const useUpgradeModal = (): {
   open: boolean;
@@ -11,7 +11,8 @@ export const useUpgradeModal = (): {
 } => {
   const [open, setOpen] = useState(false);
 
-  const handleError = (error: unknown) => {
+  // useCallback add kiya taake function reference stable rahe
+  const handleError = useCallback((error: unknown) => {
     if (error instanceof TRPCClientError) {
       if (error.data?.code === "FORBIDDEN") {
         setOpen(true);
@@ -19,7 +20,7 @@ export const useUpgradeModal = (): {
       }
     }
     return false;
-  };
+  }, []);
 
   return {
     open,
