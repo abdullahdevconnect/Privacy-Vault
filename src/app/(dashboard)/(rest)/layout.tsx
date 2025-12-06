@@ -1,3 +1,4 @@
+//F:\nodebase_final_pro\src\app\(dashboard)\(rest)\layout.tsx
 import { AppHeader } from "@/components/app-header";
 import React from "react";
 

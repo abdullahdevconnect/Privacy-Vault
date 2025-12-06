@@ -1,3 +1,4 @@
+//F:\nodebase_final_pro\src\app\(dashboard)\(rest)\credentials\[credentialId]\page.tsx
 import { requireAuth } from "@/lib/auth-utils";
 
 interface PageProps {

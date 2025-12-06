@@ -1,3 +1,4 @@
+//F:\nodebase_final_pro\src\features\auth\auth-layout.tsx
 import Link from "next/link";
 import Image from "next/image";
 import { ReactNode } from "react";

@@ -1,3 +1,4 @@
+//F:\nodebase_final_pro\src\app\api\trpc\[trpc]\route.ts
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { createTRPCContext } from "@/trpc/init";
 import { appRouter } from "@/trpc/routers/_app";

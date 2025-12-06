@@ -1,3 +1,4 @@
+//F:\nodebase_final_pro\src\inngest\functions.ts
 import { inngest } from "./client";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";

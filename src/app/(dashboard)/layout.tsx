@@ -1,3 +1,4 @@
+//F:\nodebase_final_pro\src\app\(dashboard)\layout.tsx
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 

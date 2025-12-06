@@ -1,3 +1,4 @@
+//F:\nodebase_final_pro\src\app\(dashboard)\(editor)\workflows\[workflowId]\page.tsx
 import { requireAuth } from "@/lib/auth-utils";
 
 interface PageProps {

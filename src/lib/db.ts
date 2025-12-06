@@ -1,3 +1,4 @@
+//F:\nodebase_final_pro\src\lib\db.ts
 import "server-only";
 import { PrismaClient } from "@/generated/prisma";
 

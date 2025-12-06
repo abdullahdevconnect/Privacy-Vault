@@ -1,15 +1,14 @@
+// F:\nodebase_final_pro\src\features\workflows\server\prefetch.ts
+import "server-only";
 import { trpc } from "@/trpc/server";
-import type { AppRouter } from "@/trpc/routers/_app";
-import type { inferRouterInputs } from "@trpc/server";
+import { type AppRouter } from "@/trpc/routers/_app";
+import { type inferRouterInputs } from "@trpc/server";
 
-// 1. Correctly infer input type from the AppRouter definition
-type Input = inferRouterInputs<AppRouter>["workflows"]["getMany"];
+type GetWorkflowsInput = inferRouterInputs<AppRouter>["workflows"]["getMany"];
 
 /**
- * Prefetch all workflows
+ * @param params - The search/pagination parameters (page, pageSize, query)
  */
-export const prefetchWorkflows = async (params: Input) => {
-  // 2. Use the modern v11 prefetch method.
-  // This automatically fetches data into the server-side QueryClient.
+export const prefetchWorkflows = async (params: GetWorkflowsInput) => {
   return trpc.workflows.getMany.prefetch(params);
 };
