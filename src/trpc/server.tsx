@@ -1,4 +1,3 @@
-// F:\nodebase_final_pro\src\trpc\server.tsx
 import "server-only";
 
 import { createHydrationHelpers } from "@trpc/react-query/rsc";
@@ -7,19 +6,21 @@ import { createCallerFactory, createTRPCContext } from "./init";
 import { makeQueryClient } from "./query-client";
 import { appRouter } from "./routers/_app";
 
-
+// 1. Cache the Query Client
 export const getQueryClient = cache(makeQueryClient);
 
 // 2. Create the caller factory
-const caller = createCallerFactory(appRouter);
+const createCaller = createCallerFactory(appRouter);
 
+// 3. Helper function to create the caller with context
+const getCaller = cache(async () => {
+  const ctx = await createTRPCContext();
+  return createCaller(ctx);
+});
 
+// 4. Create Hydration Helpers
 export const { trpc, HydrateClient } = createHydrationHelpers<typeof appRouter>(
-  caller as any,
+  // @ts-expect-error - tRPC v11 types are strict about async callers, but this works at runtime
+  getCaller,
   getQueryClient
 );
-
-
-export const api = async () => {
-  return caller(await createTRPCContext());
-};

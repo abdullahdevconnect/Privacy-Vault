@@ -1,4 +1,3 @@
-//F:\nodebase_final_pro\src\app\(dashboard)\(rest)\workflows\page.tsx
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import {
@@ -6,10 +5,10 @@ import {
   WorkflowsList,
 } from "@/features/workflows/components/workflows";
 import { LoadingView, ErrorView } from "@/components/entity-components";
-import { prefetchWorkflows } from "@/features/workflows/server/prefetch";
 import { requireAuth } from "@/lib/auth-utils";
-import { HydrateClient } from "@/trpc/server";
-import { searchParamsCache } from "@/features/workflows/params"; // ✅ Added missing import
+import { trpc, HydrateClient } from "@/trpc/server";
+import { searchParamsCache } from "@/features/workflows/params";
+import { PAGINATION } from "@/config/constants"; // 👈 Import added
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -21,12 +20,12 @@ const Page = async (props: PageProps) => {
   const resolvedSearchParams = await props.searchParams;
   const params = searchParamsCache.parse(resolvedSearchParams);
 
-  // ✅ Await the prefetch to prevent empty state flash
-  try {
-    await prefetchWorkflows(params);
-  } catch (err) {
-    console.error("Prefetch failed:", err);
-  }
+  // ✅ FIX: Hardcoded '8' ko hata kar Constant use kiya
+  void trpc.workflows.getMany.prefetch({
+    page: params.page ?? 1,
+    pageSize: PAGINATION.DEFAULT_PAGE_SIZE, // Ab ye 10 uthayega (ya jo bhi constant main ho)
+    search: params.search ?? "",
+  });
 
   return (
     <WorkflowsContainer>

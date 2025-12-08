@@ -1,4 +1,3 @@
-//F:\nodebase_final_pro\src\features\workflows\server\routers.ts
 import { generateSlug } from "random-word-slugs";
 import prisma from "@/lib/db";
 import {
@@ -26,7 +25,7 @@ export const workflowsRouter = createTRPCRouter({
       return prisma.workflow.delete({
         where: {
           id: input.id,
-          userId: ctx.auth.user.id, // Security: Ensures user owns the workflow
+          userId: ctx.auth.user.id,
         },
       });
     }),
@@ -59,7 +58,7 @@ export const workflowsRouter = createTRPCRouter({
         userId: ctx.auth.user.id,
         name: {
           contains: search,
-          mode: "insensitive" as const, // Added "as const" to fix the type error
+          mode: "insensitive" as const,
         },
       };
 
@@ -68,7 +67,7 @@ export const workflowsRouter = createTRPCRouter({
           skip: (page - 1) * pageSize,
           take: pageSize,
           where: whereClause,
-          orderBy: { createdAt: "desc" }, // Removed double orderBy to be safe, or you can keep both
+          orderBy: { createdAt: "desc" },
         }),
         prisma.workflow.count({
           where: whereClause,
@@ -90,6 +89,7 @@ export const workflowsRouter = createTRPCRouter({
       };
     }),
 
+  // Updated for cleaner Suspense support
   getById: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
