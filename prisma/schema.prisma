@@ -23,7 +23,6 @@ model User {
   accounts      Account[]
   workflow      Workflow[]
 
-
   @@unique([email])
   @@map("user")
 }
@@ -77,11 +76,19 @@ model Verification {
 }
 
 model Workflow {
-  id   String @id @default(cuid())
-  name String
-  createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  
+  // ✅ Fixed: Added default value for empty editor state
+  definition  String   @default("{}") 
 
-userId String
-user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // ✅ Fixed: Added status field (Critical for your TypeScript error)
+  status      String   @default("DRAFT")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

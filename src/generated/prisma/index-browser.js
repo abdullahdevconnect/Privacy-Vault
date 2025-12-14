@@ -169,6 +169,9 @@ exports.Prisma.VerificationScalarFieldEnum = {
 exports.Prisma.WorkflowScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
+  definition: 'definition',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId'

@@ -6,6 +6,7 @@ import { Editor } from "@/features/editor/components/editor";
 import { EditorHeader } from "@/features/editor/components/editor-header";
 import { EditorLoading } from "@/features/editor/components/editor-loading";
 import { EditorError } from "@/features/editor/components/editor-error";
+import { ReactFlowProvider } from "@xyflow/react"; // 👈 IMPORT ADDED
 
 interface PageProps {
   params: Promise<{
@@ -23,17 +24,20 @@ const Page = async ({ params }: PageProps) => {
   return (
     <HydrateClient>
       <ErrorBoundary fallback={<EditorError />}>
-        <div className="flex h-full w-full flex-col">
-          <Suspense fallback={<EditorLoading />}>
-            <EditorHeader workflowId={workflowId} />
-          </Suspense>
-
-          <main className="flex-1 overflow-hidden">
+        {/* ✅ FIX: Provider ko sabse uppar lagaya taake Header aur Editor context share karein */}
+        <ReactFlowProvider>
+          <div className="flex h-full w-full flex-col">
             <Suspense fallback={<EditorLoading />}>
-              <Editor workflowId={workflowId} />
+              <EditorHeader workflowId={workflowId} />
             </Suspense>
-          </main>
-        </div>
+
+            <main className="flex-1 overflow-hidden">
+              <Suspense fallback={<EditorLoading />}>
+                <Editor workflowId={workflowId} />
+              </Suspense>
+            </main>
+          </div>
+        </ReactFlowProvider>
       </ErrorBoundary>
     </HydrateClient>
   );

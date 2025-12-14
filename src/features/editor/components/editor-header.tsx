@@ -13,16 +13,20 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Save } from "lucide-react";
+import { Loader2, Save } from "lucide-react"; // Loader icon add kiya
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { useReactFlow } from "@xyflow/react"; // 👈 Graph data lenay k liye
+import { trpc } from "@/trpc/client";
+import { toast } from "sonner"; // 👈 Success message k liye
 
 export const EditorHeader = ({ workflowId }: { workflowId: string }) => {
   return (
     <header className="flex h-14 shrink-0 items-center justify-between gap-2 border-b bg-background px-4">
       <div className="flex w-full flex-row items-center gap-x-4">
         <EditorBreadcrumbs workflowId={workflowId} />
-        <EditorSaveButton />
+        {/* ✅ Workflow ID pass ki taake save ho sakay */}
+        <EditorSaveButton workflowId={workflowId} />
       </div>
     </header>
   );
@@ -78,9 +82,10 @@ const EditorNameInput = ({ workflowId }: { workflowId: string }) => {
         id: workflowId,
         name: name,
       });
+      toast.success("Workflow renamed"); // Toast add kiya
     } catch (error) {
-      // Revert name on error
       setName(workflow.name);
+      toast.error("Failed to rename workflow");
     } finally {
       setIsEditing(false);
     }
@@ -118,12 +123,45 @@ const EditorNameInput = ({ workflowId }: { workflowId: string }) => {
   );
 };
 
-const EditorSaveButton = () => {
-  // Logic for saving graph state will be added later
+// 👇 MAIN UPDATE: Save Button Logic
+const EditorSaveButton = ({ workflowId }: { workflowId: string }) => {
+  // 1. React Flow se instance lene ka hook
+  // (NOTE: Iske liye Header ka ReactFlowProvider ke andar hona zaroori hai)
+  const { toObject } = useReactFlow();
+
+  // 2. Database mutation hook
+  const updateWorkflow = trpc.workflows.update.useMutation({
+    onSuccess: () => {
+      toast.success("Workflow saved successfully");
+    },
+    onError: () => {
+      toast.error("Something went wrong while saving");
+    },
+  });
+
+  const handleSave = () => {
+    // 3. Graph ka snapshot lena (Nodes, Edges, Viewport sab copy hoga)
+    const snapshot = toObject();
+
+    // 4. Mutation call karna
+    updateWorkflow.mutate({
+      id: workflowId,
+      definition: JSON.stringify(snapshot), // Object ko string bana kar bhejna
+    });
+  };
+
   return (
     <div className="ml-auto">
-      <Button size="sm" onClick={() => {}} disabled={false} variant="outline">
-        <Save className="mr-2 size-4" />
+      <Button
+        size="sm"
+        onClick={handleSave}
+        disabled={updateWorkflow.isPending}
+        variant="outline">
+        {updateWorkflow.isPending ? (
+          <Loader2 className="mr-2 size-4 animate-spin" />
+        ) : (
+          <Save className="mr-2 size-4" />
+        )}
         Save
       </Button>
     </div>

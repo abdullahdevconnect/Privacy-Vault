@@ -5704,6 +5704,9 @@ export namespace Prisma {
   export type WorkflowMinAggregateOutputType = {
     id: string | null
     name: string | null
+    description: string | null
+    definition: string | null
+    status: string | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -5712,6 +5715,9 @@ export namespace Prisma {
   export type WorkflowMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    description: string | null
+    definition: string | null
+    status: string | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -5720,6 +5726,9 @@ export namespace Prisma {
   export type WorkflowCountAggregateOutputType = {
     id: number
     name: number
+    description: number
+    definition: number
+    status: number
     createdAt: number
     updatedAt: number
     userId: number
@@ -5730,6 +5739,9 @@ export namespace Prisma {
   export type WorkflowMinAggregateInputType = {
     id?: true
     name?: true
+    description?: true
+    definition?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -5738,6 +5750,9 @@ export namespace Prisma {
   export type WorkflowMaxAggregateInputType = {
     id?: true
     name?: true
+    description?: true
+    definition?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -5746,6 +5761,9 @@ export namespace Prisma {
   export type WorkflowCountAggregateInputType = {
     id?: true
     name?: true
+    description?: true
+    definition?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -5827,6 +5845,9 @@ export namespace Prisma {
   export type WorkflowGroupByOutputType = {
     id: string
     name: string
+    description: string | null
+    definition: string
+    status: string
     createdAt: Date
     updatedAt: Date
     userId: string
@@ -5852,6 +5873,9 @@ export namespace Prisma {
   export type WorkflowSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    description?: boolean
+    definition?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -5861,6 +5885,9 @@ export namespace Prisma {
   export type WorkflowSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    description?: boolean
+    definition?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -5870,6 +5897,9 @@ export namespace Prisma {
   export type WorkflowSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    description?: boolean
+    definition?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -5879,12 +5909,15 @@ export namespace Prisma {
   export type WorkflowSelectScalar = {
     id?: boolean
     name?: boolean
+    description?: boolean
+    definition?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
   }
 
-  export type WorkflowOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["workflow"]>
+  export type WorkflowOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "definition" | "status" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["workflow"]>
   export type WorkflowInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -5903,6 +5936,9 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      description: string | null
+      definition: string
+      status: string
       createdAt: Date
       updatedAt: Date
       userId: string
@@ -6332,6 +6368,9 @@ export namespace Prisma {
   interface WorkflowFieldRefs {
     readonly id: FieldRef<"Workflow", 'String'>
     readonly name: FieldRef<"Workflow", 'String'>
+    readonly description: FieldRef<"Workflow", 'String'>
+    readonly definition: FieldRef<"Workflow", 'String'>
+    readonly status: FieldRef<"Workflow", 'String'>
     readonly createdAt: FieldRef<"Workflow", 'DateTime'>
     readonly updatedAt: FieldRef<"Workflow", 'DateTime'>
     readonly userId: FieldRef<"Workflow", 'String'>
@@ -6824,6 +6863,9 @@ export namespace Prisma {
   export const WorkflowScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    description: 'description',
+    definition: 'definition',
+    status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     userId: 'userId'
@@ -7212,6 +7254,9 @@ export namespace Prisma {
     NOT?: WorkflowWhereInput | WorkflowWhereInput[]
     id?: StringFilter<"Workflow"> | string
     name?: StringFilter<"Workflow"> | string
+    description?: StringNullableFilter<"Workflow"> | string | null
+    definition?: StringFilter<"Workflow"> | string
+    status?: StringFilter<"Workflow"> | string
     createdAt?: DateTimeFilter<"Workflow"> | Date | string
     updatedAt?: DateTimeFilter<"Workflow"> | Date | string
     userId?: StringFilter<"Workflow"> | string
@@ -7221,6 +7266,9 @@ export namespace Prisma {
   export type WorkflowOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    definition?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -7233,6 +7281,9 @@ export namespace Prisma {
     OR?: WorkflowWhereInput[]
     NOT?: WorkflowWhereInput | WorkflowWhereInput[]
     name?: StringFilter<"Workflow"> | string
+    description?: StringNullableFilter<"Workflow"> | string | null
+    definition?: StringFilter<"Workflow"> | string
+    status?: StringFilter<"Workflow"> | string
     createdAt?: DateTimeFilter<"Workflow"> | Date | string
     updatedAt?: DateTimeFilter<"Workflow"> | Date | string
     userId?: StringFilter<"Workflow"> | string
@@ -7242,6 +7293,9 @@ export namespace Prisma {
   export type WorkflowOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    definition?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -7256,6 +7310,9 @@ export namespace Prisma {
     NOT?: WorkflowScalarWhereWithAggregatesInput | WorkflowScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Workflow"> | string
     name?: StringWithAggregatesFilter<"Workflow"> | string
+    description?: StringNullableWithAggregatesFilter<"Workflow"> | string | null
+    definition?: StringWithAggregatesFilter<"Workflow"> | string
+    status?: StringWithAggregatesFilter<"Workflow"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Workflow"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Workflow"> | Date | string
     userId?: StringWithAggregatesFilter<"Workflow"> | string
@@ -7596,6 +7653,9 @@ export namespace Prisma {
   export type WorkflowCreateInput = {
     id?: string
     name: string
+    description?: string | null
+    definition?: string
+    status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutWorkflowInput
@@ -7604,6 +7664,9 @@ export namespace Prisma {
   export type WorkflowUncheckedCreateInput = {
     id?: string
     name: string
+    description?: string | null
+    definition?: string
+    status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -7612,6 +7675,9 @@ export namespace Prisma {
   export type WorkflowUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    definition?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutWorkflowNestedInput
@@ -7620,6 +7686,9 @@ export namespace Prisma {
   export type WorkflowUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    definition?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -7628,6 +7697,9 @@ export namespace Prisma {
   export type WorkflowCreateManyInput = {
     id?: string
     name: string
+    description?: string | null
+    definition?: string
+    status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -7636,6 +7708,9 @@ export namespace Prisma {
   export type WorkflowUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    definition?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7643,6 +7718,9 @@ export namespace Prisma {
   export type WorkflowUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    definition?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -7958,6 +8036,9 @@ export namespace Prisma {
   export type WorkflowCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    definition?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -7966,6 +8047,9 @@ export namespace Prisma {
   export type WorkflowMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    definition?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -7974,6 +8058,9 @@ export namespace Prisma {
   export type WorkflowMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    definition?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -8387,6 +8474,9 @@ export namespace Prisma {
   export type WorkflowCreateWithoutUserInput = {
     id?: string
     name: string
+    description?: string | null
+    definition?: string
+    status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8394,6 +8484,9 @@ export namespace Prisma {
   export type WorkflowUncheckedCreateWithoutUserInput = {
     id?: string
     name: string
+    description?: string | null
+    definition?: string
+    status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8495,6 +8588,9 @@ export namespace Prisma {
     NOT?: WorkflowScalarWhereInput | WorkflowScalarWhereInput[]
     id?: StringFilter<"Workflow"> | string
     name?: StringFilter<"Workflow"> | string
+    description?: StringNullableFilter<"Workflow"> | string | null
+    definition?: StringFilter<"Workflow"> | string
+    status?: StringFilter<"Workflow"> | string
     createdAt?: DateTimeFilter<"Workflow"> | Date | string
     updatedAt?: DateTimeFilter<"Workflow"> | Date | string
     userId?: StringFilter<"Workflow"> | string
@@ -8720,6 +8816,9 @@ export namespace Prisma {
   export type WorkflowCreateManyUserInput = {
     id?: string
     name: string
+    description?: string | null
+    definition?: string
+    status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8802,6 +8901,9 @@ export namespace Prisma {
   export type WorkflowUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    definition?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8809,6 +8911,9 @@ export namespace Prisma {
   export type WorkflowUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    definition?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8816,6 +8921,9 @@ export namespace Prisma {
   export type WorkflowUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    definition?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

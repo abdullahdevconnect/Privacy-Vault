@@ -76,8 +76,16 @@ model Verification {
 }
 
 model Workflow {
-  id        String   @id @default(cuid())
-  name      String
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+
+  // ✅ Fixed: Added default value for empty editor state
+  definition String @default("{}")
+
+  // ✅ Fixed: Added status field (Critical for your TypeScript error)
+  status String @default("DRAFT")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

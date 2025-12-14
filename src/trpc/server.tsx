@@ -6,6 +6,9 @@ import { createCallerFactory, createTRPCContext } from "./init";
 import { makeQueryClient } from "./query-client";
 import { appRouter } from "./routers/_app";
 
+
+
+
 // 1. Cache the Query Client
 export const getQueryClient = cache(makeQueryClient);
 
@@ -20,7 +23,7 @@ const getCaller = cache(async () => {
 
 // 4. Create Hydration Helpers
 export const { trpc, HydrateClient } = createHydrationHelpers<typeof appRouter>(
-  // @ts-expect-error - tRPC v11 types are strict about async callers, but this works at runtime
+  // @ts-expect-error - tRPC v11 types issue with async callers in RSC, but works at runtime
   getCaller,
   getQueryClient
 );
