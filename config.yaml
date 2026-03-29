@@ -1,0 +1,36 @@
+privacy_vault:
+  name: "PrivacyVaultAgent"
+  version: "1.0.0"
+  description: "量子密码保护的隐私信息储存箱智能体"
+
+quantum_crypto:
+  algorithm: "kyber"  # 后量子密码算法: kyber, dilithium, sphincs
+  key_size: 256
+  qkd_simulation: true
+  entropy_source: "system"
+
+sandbox:
+  storage_path: "./vault_data"
+  max_storage_gb: 10
+  auto_encrypt: true
+  secure_delete: true
+  isolation_level: "strict"
+
+auth:
+  multi_factor: true
+  session_timeout_minutes: 1440
+  max_login_attempts: 5
+  lockout_duration_minutes: 15
+  biometric_enabled: false
+
+api:
+  host: "127.0.0.1"
+  port: 8443
+  ssl_enabled: true
+  cors_origins: ["http://localhost:3000"]
+
+logging:
+  level: "INFO"
+  file: "./logs/vault.log"
+  max_size_mb: 100
+  backup_count: 5
